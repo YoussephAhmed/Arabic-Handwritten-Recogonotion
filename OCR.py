@@ -11,25 +11,25 @@ train_x = []
 train_y = []
 j = 1
 
-for i in range(13440):
-    a = "train/id_"+str(i+1)+"_label_"+str(j)+".png"
-    train_x.append(cv2.imread(a))
-    train_y.append(j)
-    if (i+1) % 8 == 0:
-        if j+1 == 29:
-            j = 1
-        else:
-            j = j + 1
-
-train_x = np.array(train_x)
-train_y = np.array(train_y)
-
-train_y = to_categorical(train_y)
-train_y = train_y[:,1:]
-
-train_x = train_x/255
-train_x = train_x[:,:,:,1]
-train_x = train_x.reshape(train_x.shape[0], 32, 32, 1).astype('float32')
+# for i in range(13440):
+#     a = "train/id_"+str(i+1)+"_label_"+str(j)+".png"
+#     train_x.append(cv2.imread(a))
+#     train_y.append(j)
+#     if (i+1) % 8 == 0:
+#         if j+1 == 29:
+#             j = 1
+#         else:
+#             j = j + 1
+#
+# train_x = np.array(train_x)
+# train_y = np.array(train_y)
+#
+# train_y = to_categorical(train_y)
+# train_y = train_y[:,1:]
+#
+# train_x = train_x/255
+# train_x = train_x[:,:,:,1]
+# train_x = train_x.reshape(train_x.shape[0], 32, 32, 1).astype('float32')
 
 # print(train_x[0])
 
@@ -55,26 +55,26 @@ test_x = []
 test_y = []
 j = 1
 # print(train_x.shape)
-for i in range (3360):
-    a = "test/id_"+str(i+1)+"_label_"+str(j)+".png"
-    test_x.append(cv2.imread(a))
-    test_y.append(j)
-    if (i+1) % 2 == 0:
-        if j+1 == 29:
-            j = 1
-        else:
-            j = j + 1
-
-test_x = np.array(test_x)
-test_y = np.array(test_y)
-
-test_y = to_categorical(test_y)
-test_y = test_y[:,1:]
-
-test_x = test_x/255
-
-test_x = test_x[:,:,:,1]
-test_x = test_x.reshape(test_x.shape[0],32,32,1)
+# for i in range (3360):
+#     a = "test/id_"+str(i+1)+"_label_"+str(j)+".png"
+#     test_x.append(cv2.imread(a))
+#     test_y.append(j)
+#     if (i+1) % 2 == 0:
+#         if j+1 == 29:
+#             j = 1
+#         else:
+#             j = j + 1
+#
+# test_x = np.array(test_x)
+# test_y = np.array(test_y)
+#
+# test_y = to_categorical(test_y)
+# test_y = test_y[:,1:]
+#
+# test_x = test_x/255
+#
+# test_x = test_x[:,:,:,1]
+# test_x = test_x.reshape(test_x.shape[0],32,32,1)
 
 # print(train_x[0][10])
 
@@ -97,6 +97,8 @@ norm3 = model.add(BatchNormalization())
 fc2 = model.add(Dense(28, activation='softmax'))
 
 model.load_weights('weights_file.h5')
+
+model.save('OCR_model.h5')
 
 
 adam = Adam(lr = 0.001, beta_1 = 0.9, beta_2 = 0.999, epsilon = None, decay = 0.0, amsgrad = False)
