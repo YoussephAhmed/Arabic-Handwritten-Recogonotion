@@ -112,7 +112,7 @@ model.compile(loss = 'categorical_crossentropy', optimizer = adam, metrics = ['a
 
 # score = model.evaluate(test_x, test_y, batch_size = 200)
 # print(100-score[1]*100)
-mask = bool()
+
 predict_x = []
 for i in range(28):
     if i == 17 or i == 18:
@@ -121,9 +121,40 @@ for i in range(28):
         a = 'Belly/'+str(i+1)+".PNG"
 
     # print(a)
-    k = np.array(cv2.imread(a))
+    k = cv2.imread(a)
+    if i == 0:
+        print(k)
 
-    predict_x = np.array(k > 127)
+        cv2.imwrite('b.png',k)
+    k = cv2.threshold(k,127,255,cv2.THRESH_BINARY)
+
+    k = k[1][0]
+    if i == 0:
+        print(k)
+
+        cv2.imwrite('c.png',k)
+
+
+    # cv2.imwrite('c.png',predict_x[0])
+    k = cv2.resize(k,(32,32),interpolation = cv2.INTER_AREA)
+    # print(k)
+    # cv2.imwrite('d.png',predict_x[0])
+
+    if i == 0:
+        print(k)
+
+        cv2.imwrite('d.png',k)
+
+
+
+    predict_x.append(k)
+
+    # print(k)
+    # predict_x.append(k)
+
+    # k = np.array(k > 127)
+    # k = int (k)
+    #
 
     # k = mask * k
 
@@ -131,21 +162,31 @@ for i in range(28):
 
 
 
-# predict_x = np.array(predict_x)
+predict_x = np.array(predict_x)
+# print(predict_x.shape)
 
+predict_x = predict_x / 255
 
 print(predict_x.shape)
 
+# predict_x = cv2.resize(predict_x,(32,32,1),interpolation = cv2.INTER_AREA)
+
+
+# predict_x = predict_x[:,:,:,1]
+
+
 # predict_x = predict_x / 255
 # predict_x = predict_x[:,:,:,1]
-predict_x = predict_x.reshape(predict_x.shape[0],32,32,1).astype('float32')
+# predict_x = predict_x.reshape(predict_x.shape[0],32,32,1).astype('float32')
 
 
-for i in predict_x:
-
-    print(model.predict(i))
-
-
+# for i in predict_x:
+#
+#     print(model.predict(i))
+predict_x = predict_x.reshape(predict_x.shape[0],32,32,1)
+cv2.imwrite('k.png',predict_x[0])
+a = model.predict_classes(predict_x)[0]
+print(a)
 # sample = open('weights file.txt','w')
 # print(model.get_weights(), file = sample)
 # sample.close()
