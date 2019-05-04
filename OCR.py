@@ -8,130 +8,134 @@ from keras.utils.np_utils import to_categorical
 from keras.datasets import mnist
 import cv2
 
-train_x = []
-train_y = []
-j = 1
-
-for i in range(53760):
-    a = "train_letters/id_"+str(i+1)+"_label_"+str(j)+".png"
-    train_x.append(cv2.imread(a)[:,:,1])
-    train_y.append(j)
-    if (i+1) % 8 == 0:
-        if j+1 == 29:
-            j = 1
-        else:
-            j = j + 1
-
-(X_train, y_train), (X_test, y_test) = mnist.load_data()
-
-for i in range (X_train.shape[0]):
-    train_x.append(cv2.resize(cv2.bitwise_not(X_train[i]),(32,32)))
-    train_y.append(y_train[i]+29)
-
-
-cv2.imwrite('img1.png',X_train[30])
-cv2.imwrite('img2.png',train_x[70000])
-
-train_x = np.array(train_x)
-
-
-train_x = train_x/255
-# train_x = train_x[:,:,:,1]
-train_x = train_x.reshape(train_x.shape[0], 32, 32, 1).astype('float32')
-print(train_x[70000][10])
-cv2.imwrite('img3.png',train_x[70000])
-
-# (X_train, y_train), (X_test, y_test) = mnist.load_data()
-#
-# train_temp = []
-# for i in range (X_train.shape[0]):
-#
-#     a = cv2.resize(X_train[i],(32,32))
-#     train_temp.append(a)
-#     train_y.append(y_train[i]+29)
-
-
-# train_temp = np.array(train_temp)
-# train_temp = train_temp/255
-# train_temp = train_temp.reshape(train_temp.shape[0], 32, 32, 1).astype('float32')
-#
-print(train_x.shape)
-# train_x = np.append(train_x, train_temp)
-train_y = np.array(train_y)
-
-train_y = to_categorical(train_y)
-train_y = train_y[:,1:]
-#
-#
-# print(train_x.shape)
-# print(train_x[0])
-
-# validate_x = []
-# validate_y = []
+# train_x = []
+# train_y = []
 # j = 1
-#
-# for i in range(12097,13440):
-#     a = "train/id_"+str(i+1)+"_label_"+str(j)+".png"
-#     validate_x.append(cv2.imread(a))
-#     validate_y.append(j)
+
+# for i in range(53760):
+#     a = "train_letters/id_"+str(i+1)+"_label_"+str(j)+".png"
+#     train_x.append(cv2.imread(a)[:,:,1])
+#     train_y.append(j)
 #     if (i+1) % 8 == 0:
 #         if j+1 == 29:
 #             j = 1
 #         else:
 #             j = j + 1
 #
-# validate_x = np.array(validate_x)
-# validate_y = np.array(validate_y)
-
-
-test_x = []
-test_y = []
-j = 1
+# (X_train, y_train), (X_test, y_test) = mnist.load_data()
+#
+# for i in range (X_train.shape[0]):
+#     train_x.append(cv2.resize(cv2.bitwise_not(X_train[i]),(32,32)))
+#     train_y.append(y_train[i]+29)
+#
+#
+# cv2.imwrite('img1.png',train_x[30000])
+# cv2.imwrite('img2.png',train_x[70000])
+#
+# train_x = np.array(train_x)
+#
+#
+# # train_x = train_x[:,:,:,1]
+# train_x = train_x.reshape(train_x.shape[0], 32, 32, 1).astype('float32')
+# print(train_x[70000][10])
+# cv2.imwrite('img3.png',train_x[30000])
+#
+# cv2.imwrite('img4.png',train_x[70000])
+#
+# train_x = train_x/255
+#
+#
+# # (X_train, y_train), (X_test, y_test) = mnist.load_data()
+# #
+# # train_temp = []
+# # for i in range (X_train.shape[0]):
+# #
+# #     a = cv2.resize(X_train[i],(32,32))
+# #     train_temp.append(a)
+# #     train_y.append(y_train[i]+29)
+#
+#
+# # train_temp = np.array(train_temp)
+# # train_temp = train_temp/255
+# # train_temp = train_temp.reshape(train_temp.shape[0], 32, 32, 1).astype('float32')
+# #
 # print(train_x.shape)
-for i in range (3360):
-    a = "test/id_"+str(i+1)+"_label_"+str(j)+".png"
-    test_x.append(cv2.imread(a)[:,:,1])
-    test_y.append(j)
-    if (i+1) % 2 == 0:
-        if j+1 == 29:
-            j = 1
-        else:
-            j = j + 1
-
-
-for i in range (X_test.shape[0]):
-    test_x.append(cv2.resize(cv2.bitwise_not(X_test[i]),(32,32)))
-    test_y.append(y_test[i]+29)
-
-
-test_x = np.array(test_x)
-
-
-test_x = test_x/255
-
-# test_x = test_x[:,:,:,1]
-test_x = test_x.reshape(test_x.shape[0],32,32,1)
-
-
-# test_temp = []
+# # train_x = np.append(train_x, train_temp)
+# train_y = np.array(train_y)
+#
+# train_y = to_categorical(train_y)
+# train_y = train_y[:,1:]
+# #
+# #
+# # print(train_x.shape)
+# # print(train_x[0])
+#
+# # validate_x = []
+# # validate_y = []
+# # j = 1
+# #
+# # for i in range(12097,13440):
+# #     a = "train/id_"+str(i+1)+"_label_"+str(j)+".png"
+# #     validate_x.append(cv2.imread(a))
+# #     validate_y.append(j)
+# #     if (i+1) % 8 == 0:
+# #         if j+1 == 29:
+# #             j = 1
+# #         else:
+# #             j = j + 1
+# #
+# # validate_x = np.array(validate_x)
+# # validate_y = np.array(validate_y)
+#
+#
+# test_x = []
+# test_y = []
+# j = 1
+# # print(train_x.shape)
+# for i in range (3360):
+#     a = "test/id_"+str(i+1)+"_label_"+str(j)+".png"
+#     test_x.append(cv2.imread(a)[:,:,1])
+#     test_y.append(j)
+#     if (i+1) % 2 == 0:
+#         if j+1 == 29:
+#             j = 1
+#         else:
+#             j = j + 1
+#
+#
 # for i in range (X_test.shape[0]):
+#     test_x.append(cv2.resize(cv2.bitwise_not(X_test[i]),(32,32)))
+#     test_y.append(y_test[i]+29)
 #
 #
-#     test_temp.append(cv2.resize(X_test[i],(32,32)))
-#     test_y.append(y_test[i] + 29)
+# test_x = np.array(test_x)
 #
 #
-# test_temp = np.array(test_temp)
-# test_temp = test_temp/255
-# test_temp = test_temp.reshape(test_temp.shape[0], 32, 32, 1).astype('float32')
+# test_x = test_x/255
 #
-# test_x = np.append(test_x, test_temp)
-
-
-test_y = np.array(test_y)
-
-test_y = to_categorical(test_y)
-test_y = test_y[:,1:]
+# # test_x = test_x[:,:,:,1]
+# test_x = test_x.reshape(test_x.shape[0],32,32,1)
+#
+#
+# # test_temp = []
+# # for i in range (X_test.shape[0]):
+# #
+# #
+# #     test_temp.append(cv2.resize(X_test[i],(32,32)))
+# #     test_y.append(y_test[i] + 29)
+# #
+# #
+# # test_temp = np.array(test_temp)
+# # test_temp = test_temp/255
+# # test_temp = test_temp.reshape(test_temp.shape[0], 32, 32, 1).astype('float32')
+# #
+# # test_x = np.append(test_x, test_temp)
+#
+#
+# test_y = np.array(test_y)
+#
+# test_y = to_categorical(test_y)
+# test_y = test_y[:,1:]
 
 
 # print(train_x[0][10])
@@ -154,9 +158,9 @@ drop3 = model.add(Dropout(0.5))
 norm3 = model.add(BatchNormalization())
 fc2 = model.add(Dense(38, activation='softmax'))
 
-# model.load_weights('weights_file.h5')
+model.load_weights('weights_file.h5')
 
-# model.save('OCR_model.h5')
+model.save('final_model.h5')
 
 
 adam = Adam(lr = 0.001, beta_1 = 0.9, beta_2 = 0.999, epsilon = None, decay = 0.0, amsgrad = False)
@@ -164,6 +168,15 @@ adam = Adam(lr = 0.001, beta_1 = 0.9, beta_2 = 0.999, epsilon = None, decay = 0.
 model.compile(loss = 'categorical_crossentropy', optimizer = adam, metrics = ['accuracy'])
 
 # model.summary()
+
+
+a = cv2.imread('0/2.png')[:,:,1]
+cv2.imwrite('img.png',a)
+
+a = cv2.bitwise_not(cv2.bitwise_not(a))
+a = a.reshape(1,32, 32, 1).astype('float32')
+cv2.imwrite('img2.png',a)
+a /= 255
 
 
 # history = model.fit(train_x, train_y, batch_size = 50, epochs = 50, shuffle = True, verbose = 1, validation_data = (test_x,test_y))
@@ -252,7 +265,7 @@ model.compile(loss = 'categorical_crossentropy', optimizer = adam, metrics = ['a
 # print(model.get_weights().shape)
 # model.save_weights('weights_file.h5')
 
-
+print(model.predict_classes([a]))
 
 import matplotlib.pyplot as plt
 
