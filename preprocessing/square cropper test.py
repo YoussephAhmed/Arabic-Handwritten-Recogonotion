@@ -168,14 +168,14 @@ def crop_squares(img):
 
 def main():
     from glob import glob
-    for fn in glob('metro12.jpg'):
+    for fn in glob('metro11.jpg'):
         img = cv.imread(fn)
         cropped_images = crop_squares(img)
-        """
+
         for i in range(len(cropped_images)):
             for j in range(len(cropped_images[i])):
                 print_image_on_folder(cropped_images[i][j], str(j), str(i))
-        """
+
     print('Done')
 
 
