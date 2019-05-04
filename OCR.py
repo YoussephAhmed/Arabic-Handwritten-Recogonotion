@@ -5,32 +5,65 @@ from keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, Flatten, BatchNor
 from keras.optimizers import Adam
 from keras.losses import categorical_crossentropy
 from keras.utils.np_utils import to_categorical
+from keras.datasets import mnist
 import cv2
 
 train_x = []
 train_y = []
 j = 1
 
-# for i in range(13440):
-#     a = "train/id_"+str(i+1)+"_label_"+str(j)+".png"
-#     train_x.append(cv2.imread(a))
-#     train_y.append(j)
-#     if (i+1) % 8 == 0:
-#         if j+1 == 29:
-#             j = 1
-#         else:
-#             j = j + 1
-#
-# train_x = np.array(train_x)
-# train_y = np.array(train_y)
-#
-# train_y = to_categorical(train_y)
-# train_y = train_y[:,1:]
-#
-# train_x = train_x/255
-# train_x = train_x[:,:,:,1]
-# train_x = train_x.reshape(train_x.shape[0], 32, 32, 1).astype('float32')
+for i in range(53760):
+    a = "train_letters/id_"+str(i+1)+"_label_"+str(j)+".png"
+    train_x.append(cv2.imread(a)[:,:,1])
+    train_y.append(j)
+    if (i+1) % 8 == 0:
+        if j+1 == 29:
+            j = 1
+        else:
+            j = j + 1
 
+(X_train, y_train), (X_test, y_test) = mnist.load_data()
+
+for i in range (X_train.shape[0]):
+    train_x.append(cv2.resize(cv2.bitwise_not(X_train[i]),(32,32)))
+    train_y.append(y_train[i]+29)
+
+
+cv2.imwrite('img1.png',X_train[30])
+cv2.imwrite('img2.png',train_x[70000])
+
+train_x = np.array(train_x)
+
+
+train_x = train_x/255
+# train_x = train_x[:,:,:,1]
+train_x = train_x.reshape(train_x.shape[0], 32, 32, 1).astype('float32')
+print(train_x[70000][10])
+cv2.imwrite('img3.png',train_x[70000])
+
+# (X_train, y_train), (X_test, y_test) = mnist.load_data()
+#
+# train_temp = []
+# for i in range (X_train.shape[0]):
+#
+#     a = cv2.resize(X_train[i],(32,32))
+#     train_temp.append(a)
+#     train_y.append(y_train[i]+29)
+
+
+# train_temp = np.array(train_temp)
+# train_temp = train_temp/255
+# train_temp = train_temp.reshape(train_temp.shape[0], 32, 32, 1).astype('float32')
+#
+print(train_x.shape)
+# train_x = np.append(train_x, train_temp)
+train_y = np.array(train_y)
+
+train_y = to_categorical(train_y)
+train_y = train_y[:,1:]
+#
+#
+# print(train_x.shape)
 # print(train_x[0])
 
 # validate_x = []
@@ -55,26 +88,51 @@ test_x = []
 test_y = []
 j = 1
 # print(train_x.shape)
-# for i in range (3360):
-#     a = "test/id_"+str(i+1)+"_label_"+str(j)+".png"
-#     test_x.append(cv2.imread(a))
-#     test_y.append(j)
-#     if (i+1) % 2 == 0:
-#         if j+1 == 29:
-#             j = 1
-#         else:
-#             j = j + 1
-#
-# test_x = np.array(test_x)
-# test_y = np.array(test_y)
-#
-# test_y = to_categorical(test_y)
-# test_y = test_y[:,1:]
-#
-# test_x = test_x/255
-#
+for i in range (3360):
+    a = "test/id_"+str(i+1)+"_label_"+str(j)+".png"
+    test_x.append(cv2.imread(a)[:,:,1])
+    test_y.append(j)
+    if (i+1) % 2 == 0:
+        if j+1 == 29:
+            j = 1
+        else:
+            j = j + 1
+
+
+for i in range (X_test.shape[0]):
+    test_x.append(cv2.resize(cv2.bitwise_not(X_test[i]),(32,32)))
+    test_y.append(y_test[i]+29)
+
+
+test_x = np.array(test_x)
+
+
+test_x = test_x/255
+
 # test_x = test_x[:,:,:,1]
-# test_x = test_x.reshape(test_x.shape[0],32,32,1)
+test_x = test_x.reshape(test_x.shape[0],32,32,1)
+
+
+# test_temp = []
+# for i in range (X_test.shape[0]):
+#
+#
+#     test_temp.append(cv2.resize(X_test[i],(32,32)))
+#     test_y.append(y_test[i] + 29)
+#
+#
+# test_temp = np.array(test_temp)
+# test_temp = test_temp/255
+# test_temp = test_temp.reshape(test_temp.shape[0], 32, 32, 1).astype('float32')
+#
+# test_x = np.append(test_x, test_temp)
+
+
+test_y = np.array(test_y)
+
+test_y = to_categorical(test_y)
+test_y = test_y[:,1:]
+
 
 # print(train_x[0][10])
 
@@ -94,11 +152,11 @@ model.add(Flatten())
 fc1 = model.add(Dense(1024, activation='relu'))
 drop3 = model.add(Dropout(0.5))
 norm3 = model.add(BatchNormalization())
-fc2 = model.add(Dense(28, activation='softmax'))
+fc2 = model.add(Dense(38, activation='softmax'))
 
-model.load_weights('weights_file.h5')
+# model.load_weights('weights_file.h5')
 
-model.save('OCR_model.h5')
+# model.save('OCR_model.h5')
 
 
 adam = Adam(lr = 0.001, beta_1 = 0.9, beta_2 = 0.999, epsilon = None, decay = 0.0, amsgrad = False)
@@ -108,46 +166,46 @@ model.compile(loss = 'categorical_crossentropy', optimizer = adam, metrics = ['a
 # model.summary()
 
 
-# history = model.fit(train_x, train_y, batch_size = 200, epochs = 200, shuffle = True, verbose = 1, validation_split = 0.1)
+# history = model.fit(train_x, train_y, batch_size = 50, epochs = 50, shuffle = True, verbose = 1, validation_data = (test_x,test_y))
 
 # score = model.evaluate(test_x, test_y, batch_size = 200)
 # print(100-score[1]*100)
 
-predict_x = []
-for i in range(28):
-    if i == 17 or i == 18:
-        continue
-    else:
-        a = 'Belly/'+str(i+1)+".PNG"
-
-    # print(a)
-    k = cv2.imread(a)
-    if i == 0:
-        print(k)
-
-        cv2.imwrite('b.png',k)
-    k = cv2.threshold(k,127,255,cv2.THRESH_BINARY)
-
-    k = k[1][0]
-    if i == 0:
-        print(k)
-
-        cv2.imwrite('c.png',k)
-
-
-    # cv2.imwrite('c.png',predict_x[0])
-    k = cv2.resize(k,(32,32),interpolation = cv2.INTER_AREA)
-    # print(k)
-    # cv2.imwrite('d.png',predict_x[0])
-
-    if i == 0:
-        print(k)
-
-        cv2.imwrite('d.png',k)
-
-
-
-    predict_x.append(k)
+# predict_x = []
+# for i in range(28):
+#     if i == 17 or i == 18:
+#         continue
+#     else:
+#         a = 'Belly/'+str(i+1)+".PNG"
+#
+#     # print(a)
+#     k = cv2.imread(a)
+#     if i == 0:
+#         print(k)
+#
+#         cv2.imwrite('b.png',k)
+#     k = cv2.threshold(k,127,255,cv2.THRESH_BINARY)
+#
+#     k = k[1][0]
+#     if i == 0:
+#         print(k)
+#
+#         cv2.imwrite('c.png',k)
+#
+#
+#     # cv2.imwrite('c.png',predict_x[0])
+#     k = cv2.resize(k,(32,32),interpolation = cv2.INTER_AREA)
+#     # print(k)
+#     # cv2.imwrite('d.png',predict_x[0])
+#
+#     if i == 0:
+#         print(k)
+#
+#         cv2.imwrite('d.png',k)
+#
+#
+#
+#     predict_x.append(k)
 
     # print(k)
     # predict_x.append(k)
@@ -162,12 +220,12 @@ for i in range(28):
 
 
 
-predict_x = np.array(predict_x)
+# predict_x = np.array(predict_x)
+# # print(predict_x.shape)
+#
+# predict_x = predict_x / 255
+#
 # print(predict_x.shape)
-
-predict_x = predict_x / 255
-
-print(predict_x.shape)
 
 # predict_x = cv2.resize(predict_x,(32,32,1),interpolation = cv2.INTER_AREA)
 
@@ -183,10 +241,10 @@ print(predict_x.shape)
 # for i in predict_x:
 #
 #     print(model.predict(i))
-predict_x = predict_x.reshape(predict_x.shape[0],32,32,1)
-cv2.imwrite('k.png',predict_x[0])
-a = model.predict_classes(predict_x)[0]
-print(a)
+# predict_x = predict_x.reshape(predict_x.shape[0],32,32,1)
+# cv2.imwrite('k.png',predict_x[0])
+# a = model.predict_classes(predict_x)[0]
+# print(a)
 # sample = open('weights file.txt','w')
 # print(model.get_weights(), file = sample)
 # sample.close()
@@ -196,21 +254,21 @@ print(a)
 
 
 
-# import matplotlib.pyplot as plt
-#
-# plt.plot(history.history['acc'])
-# plt.plot(history.history['val_acc'])
-# plt.title('Model accuracy')
-# plt.ylabel('Accuracy')
-# plt.xlabel('Epoch')
-# plt.legend(['Train', 'Test'], loc='upper left')
-# plt.show()
-#
-# # Plot training & validation loss values
-# plt.plot(history.history['loss'])
-# plt.plot(history.history['val_loss'])
-# plt.title('Model loss')
-# plt.ylabel('Loss')
-# plt.xlabel('Epoch')
-# plt.legend(['Train', 'Test'], loc='upper left')
-# plt.show()
+import matplotlib.pyplot as plt
+
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('Model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
+
+# Plot training & validation loss values
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
