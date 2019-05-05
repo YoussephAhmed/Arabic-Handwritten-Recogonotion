@@ -8,19 +8,20 @@ from keras.utils.np_utils import to_categorical
 from keras.datasets import mnist
 import cv2
 
-# train_x = []
-# train_y = []
-# j = 1
+train_x = []
+train_y = []
+j = 1
 
-# for i in range(53760):
-#     a = "train_letters/id_"+str(i+1)+"_label_"+str(j)+".png"
-#     train_x.append(cv2.imread(a)[:,:,1])
-#     train_y.append(j)
-#     if (i+1) % 8 == 0:
-#         if j+1 == 29:
-#             j = 1
-#         else:
-#             j = j + 1
+for i in range(53760):
+    # print(i)
+    a = "train_letters/id_"+str(i+1)+"_label_"+str(j)+".png"
+    train_x.append(cv2.imread(a)[:,:,1])
+    train_y.append(j)
+    if (i+1) % 8 == 0:
+        if j+1 == 29:
+            j = 1
+        else:
+            j = j + 1
 #
 # (X_train, y_train), (X_test, y_test) = mnist.load_data()
 #
@@ -32,17 +33,17 @@ import cv2
 # cv2.imwrite('img1.png',train_x[30000])
 # cv2.imwrite('img2.png',train_x[70000])
 #
-# train_x = np.array(train_x)
+train_x = np.array(train_x)
 #
 #
 # # train_x = train_x[:,:,:,1]
-# train_x = train_x.reshape(train_x.shape[0], 32, 32, 1).astype('float32')
+train_x = train_x.reshape(train_x.shape[0], 32, 32, 1).astype('float32')
 # print(train_x[70000][10])
 # cv2.imwrite('img3.png',train_x[30000])
 #
 # cv2.imwrite('img4.png',train_x[70000])
 #
-# train_x = train_x/255
+train_x = train_x/255
 #
 #
 # # (X_train, y_train), (X_test, y_test) = mnist.load_data()
@@ -61,10 +62,11 @@ import cv2
 # #
 # print(train_x.shape)
 # # train_x = np.append(train_x, train_temp)
-# train_y = np.array(train_y)
+train_y = np.array(train_y)
 #
-# train_y = to_categorical(train_y)
-# train_y = train_y[:,1:]
+train_y = to_categorical(train_y, num_classes = 39)
+print(train_y)
+train_y = train_y[:,1:]
 # #
 # #
 # # print(train_x.shape)
@@ -160,7 +162,6 @@ fc2 = model.add(Dense(38, activation='softmax'))
 
 model.load_weights('weights_file.h5')
 
-model.save('final_model.h5')
 
 
 adam = Adam(lr = 0.001, beta_1 = 0.9, beta_2 = 0.999, epsilon = None, decay = 0.0, amsgrad = False)
@@ -170,16 +171,17 @@ model.compile(loss = 'categorical_crossentropy', optimizer = adam, metrics = ['a
 # model.summary()
 
 
-a = cv2.imread('0/2.png')[:,:,1]
-cv2.imwrite('img.png',a)
+# a = cv2.imread('0/3.png')[:,:,1]
+# cv2.imwrite('img.png',a)
+#
+# a = cv2.bitwise_not(cv2.bitwise_not(a))
+# a = a.reshape(1,32, 32, 1).astype('float32')
+# cv2.imwrite('img2.png',a)
+# a /= 255
 
-a = cv2.bitwise_not(cv2.bitwise_not(a))
-a = a.reshape(1,32, 32, 1).astype('float32')
-cv2.imwrite('img2.png',a)
-a /= 255
 
-
-# history = model.fit(train_x, train_y, batch_size = 50, epochs = 50, shuffle = True, verbose = 1, validation_data = (test_x,test_y))
+history = model.fit(train_x, train_y, batch_size = 200, epochs = 100, shuffle = True, verbose = 1)
+model.save('final_model.h5')
 
 # score = model.evaluate(test_x, test_y, batch_size = 200)
 # print(100-score[1]*100)
@@ -263,9 +265,9 @@ a /= 255
 # sample.close()
 
 # print(model.get_weights().shape)
-# model.save_weights('weights_file.h5')
+model.save_weights('weights_file.h5')
 
-print(model.predict_classes([a]))
+# print(model.predict_classes([a]))
 
 import matplotlib.pyplot as plt
 
