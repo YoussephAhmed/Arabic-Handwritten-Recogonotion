@@ -1,8 +1,8 @@
 # Arabic-Handwritten-Recogonotion
 Program to transform Arabic Handwritten forms to computerized form 
-By :
-Ahmed Moustafa
-Mennat Allah Ehab
-Manar AbdelRahman
-Nabil Negm
-Youssef Ahmed
+By : <br>
+Ahmed Moustafa <br> 
+Mennat Allah Ehab <br>
+Manar AbdelRahman <br>
+Nabil Negm <br>
+Youssef Ahmed <br>
